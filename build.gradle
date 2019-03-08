@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    compile "com.discord4j:Discord4J:${discord4j_version}"
+    compile "com.discord4j:discord4j-core:${discord4j_version}"
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
