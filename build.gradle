@@ -21,10 +21,12 @@ plugins {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     compile "com.discord4j:discord4j-core:${discord4j_version}"
+    compile "club.minnced:java-discord-rpc:${discord_rpc_version}"
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -38,6 +40,8 @@ minecraft {
     version = "${forge_version}"
     runDir = "run"
     mappings = "${mappings_version}"
+    replace "@VERSION@", project.version
+    replaceIn "DiscordIntegration.java"
     clientRunArgs += "--username=OwO"
 }
 
