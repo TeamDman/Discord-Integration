@@ -17,10 +17,6 @@ public class DiscordIntegration {
 	static final String MODID  = "discordintegration";
 	static final Logger logger = LogManager.getLogger(MODID);
 	static DiscordClient client;
-//	@SidedProxy(serverSide = "ca.teamdman.discordintegration.ServerProxy", clientSide = "ca.teamdman.discordintegration.ClientProxy")
-//	static CommonProxy proxy;
-	//@Shadows @CritFlaw
-
 
 	public DiscordIntegration() {
 		try {
