@@ -1,7 +1,7 @@
 [
   {
-    "modid": "discordbutinminecraft",
-    "name": "Discord, But In Minecraft",
+    "modid": "discord",
+    "name": "Discord",
     "description": "Sends Minecraft messages to Discord, and vice versa.",
     "version": "${version}",
     "mcversion": "1.12.2",

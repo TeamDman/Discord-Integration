@@ -68,7 +68,6 @@ public class RichPresence {
 
 		int hash = presence.hashCode();
 		consumer.accept(presence);
-		System.out.println("Changed presence to " + presence.largeImageText);
 		if (hash != presence.hashCode())
 			rpc.Discord_UpdatePresence(presence);
 	}

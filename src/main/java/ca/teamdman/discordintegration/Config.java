@@ -37,9 +37,9 @@ public class Config {
 	}
 
 	private static void syncConfig() {
-		client.appid = config.get("Client", "App ID", "000000000000000000", "Client ID of the Discord Rich Presence as seen in the developer portal").getString();
-		client.largeImageKey = config.get("Client", "Large Image Key" , "").getString();
-		client.smallImageKey = config.get("Client", "Small Image Key" , "").getString();
+		client.appid = config.get("Client", "App ID", "558133001419096084", "Client ID of the Discord Rich Presence as seen in the developer portal").getString();
+		client.largeImageKey = config.get("Client", "Large Image Key" , "hollow").getString();
+		client.smallImageKey = config.get("Client", "Small Image Key" , "diamond").getString();
 		client.smallImageText = config.get("Client", "Small Image Text" , "").getString();
 		server.enabled = config.get("Server","Enable Chat Bridge", false, "Whether or not messages will be connected to a Discord channel").getBoolean();
 		server.channel_id = config.get("Server", "Channel ID", "000000000000000000", "Channel ID for the chat bridge").getString();
