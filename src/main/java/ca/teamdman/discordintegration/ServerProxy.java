@@ -23,8 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ServerProxy extends CommonProxy {
-	@Override
+public class ServerProxy  {
 	public void onServerStart(FMLServerStartedEvent event) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 

@@ -3,8 +3,10 @@ package ca.teamdman.discordintegration;
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ProgressManager;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -48,6 +50,7 @@ public class RichPresence {
 		presence.startTimestamp = System.currentTimeMillis() / 1000;
 		presence.largeImageKey = Config.client.largeImageKey;
 		presence.smallImageKey = Config.client.smallImageKey;
+		presence.smallImageText = Config.client.smallImageText;
 		rpc.Discord_UpdatePresence(presence);
 		setState(state);
 		System.out.println("Discord Rich Presence thread started");
@@ -60,8 +63,12 @@ public class RichPresence {
 	public static void update(Consumer<DiscordRichPresence> consumer) {
 		if (state == State.DISABLED)
 			return;
+		if (FMLCommonHandler.instance().getSide() != Side.CLIENT)
+			return;
+
 		int hash = presence.hashCode();
 		consumer.accept(presence);
+		System.out.println("Changed presence to " + presence.largeImageText);
 		if (hash != presence.hashCode())
 			rpc.Discord_UpdatePresence(presence);
 	}
