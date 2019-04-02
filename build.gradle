@@ -17,6 +17,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'idea'
 }
 
 repositories {
@@ -24,8 +25,14 @@ repositories {
     jcenter()
 }
 
+configurations {
+    jarjar {
+        transitive = true
+    }
+}
+
 dependencies {
-    compile "com.discord4j:discord4j-core:${discord4j_version}"
+    jarjar "club.minnced:java-discord-rpc:${discord_rpc_version}"
     compile "club.minnced:java-discord-rpc:${discord_rpc_version}"
 }
 
@@ -39,10 +46,32 @@ sourceCompatibility = targetCompatibility = '1.8'
 minecraft {
     version = "${forge_version}"
     runDir = "run"
+    
     mappings = "${mappings_version}"
+    makeObfSourceJar = false
+    
     replace "@VERSION@", project.version
     replaceIn "DiscordIntegration.java"
     clientRunArgs += "--username=OwO"
+}
+
+jar {
+    //basically shamelessly stolen from quat who stole from Clothesline's buildscript.
+
+    //if you're here from browsing github for jar-in-jar examples:
+    //don't forget to check the meta-inf folder, there's an important file in there.
+
+    //copy all jarinjar-marked dependency jars into the libraries folder
+    from(configurations.jarjar.files) {
+        include "*"
+        into "META-INF/libraries"
+    }
+
+    //add the forge containeddeps weirdness??? hopefully this works???
+    manifest {
+        attributes "ContainedDeps": configurations.jarjar.files.collect{it.name}.join(" ")
+        attributes "Timestamp": System.currentTimeMillis()
+    }
 }
 
 processResources {

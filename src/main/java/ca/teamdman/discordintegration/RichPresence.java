@@ -3,10 +3,8 @@ package ca.teamdman.discordintegration;
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ProgressManager;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -16,7 +14,7 @@ import java.util.function.Consumer;
 public class RichPresence {
 	private static final DiscordRichPresence presence = new DiscordRichPresence();
 	private static final DiscordRPC          rpc      = DiscordRPC.INSTANCE;
-	private static State state = State.DISABLED;
+	private static       State               state    = State.DISABLED;
 
 	static {
 		ProgressManager.ProgressBar barbar = null;
@@ -40,7 +38,7 @@ public class RichPresence {
 		}, 0, 2, TimeUnit.SECONDS);
 	}
 
-	public static void enable(State state) {
+	public static void enable() {
 		System.out.println("Creating Discord Rich Presence");
 		String               applicationId = Config.client.appid;
 		DiscordEventHandlers handlers      = new DiscordEventHandlers();
@@ -52,22 +50,25 @@ public class RichPresence {
 		presence.smallImageKey = Config.client.smallImageKey;
 		presence.smallImageText = Config.client.smallImageText;
 		rpc.Discord_UpdatePresence(presence);
-		setState(state);
+		state = State.ENABLED;
 		System.out.println("Discord Rich Presence thread started");
 	}
 
 	public static void setState(State state) {
+		if (state == State.DISABLED)
+			return;
 		RichPresence.state = state;
 	}
 
 	public static void update(Consumer<DiscordRichPresence> consumer) {
 		if (state == State.DISABLED)
 			return;
-		if (FMLCommonHandler.instance().getSide() != Side.CLIENT)
-			return;
-
 		int hash = presence.hashCode();
-		consumer.accept(presence);
+		try {
+			consumer.accept(presence);
+		} catch (Exception e) {
+			// fail silently,
+		}
 		if (hash != presence.hashCode())
 			rpc.Discord_UpdatePresence(presence);
 	}
@@ -81,6 +82,6 @@ public class RichPresence {
 	public enum State {
 		DISABLED,
 		ENABLED,
-		LOADING;
+		LOADING
 	}
 }
