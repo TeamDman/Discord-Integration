@@ -9,16 +9,19 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:0.4.2"
     }
 }
 
-plugins {
-    id 'java'
-    id 'idea'
-}
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: org.jetbrains.gradle.ext.IdeaExtPlugin
 
 repositories {
     mavenCentral()
@@ -52,7 +55,7 @@ minecraft {
     
     replace "@VERSION@", project.version
     replaceIn "DiscordIntegration.java"
-    clientRunArgs += "--username=OwO"
+//    clientRunArgs += "--username=OwO"
 }
 
 jar {
@@ -93,8 +96,25 @@ processResources {
     }
 }
 
-idea{
-    module{
+import org.jetbrains.gradle.ext.*
+idea {
+    module {
         sourceDirs += file('src/main/java')
+    }
+    //noinspection GroovyAssignabilityCheck
+    project {
+        settings {
+            runConfigurations {
+                "Run Client"(Application) {
+                    mainClass = 'GradleStart'
+                    moduleName = getProject().idea.module.name
+                }
+                "Run Server"(Application) {
+                    mainClass = 'GradleStartServer'
+                    moduleName = getProject().idea.module.name
+                }
+            }
+            copyright {}
+        }
     }
 }
