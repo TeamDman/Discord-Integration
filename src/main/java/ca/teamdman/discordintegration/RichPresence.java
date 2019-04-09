@@ -33,6 +33,7 @@ public class RichPresence {
 					presence.state = bar.getMessage();
 				});
 			}
+//			System.out.println(presence.state);
 			if (state != State.DISABLED)
 				rpc.Discord_RunCallbacks();
 		}, 0, 2, TimeUnit.SECONDS);
@@ -63,14 +64,14 @@ public class RichPresence {
 	public static void update(Consumer<DiscordRichPresence> consumer) {
 		if (state == State.DISABLED)
 			return;
-		int hash = presence.hashCode();
+//		int hash = presence.hashCode();
 		try {
 			consumer.accept(presence);
 		} catch (Exception e) {
 			// fail silently,
 		}
-		if (hash != presence.hashCode())
-			rpc.Discord_UpdatePresence(presence);
+//		if (hash != presence.hashCode())
+		rpc.Discord_UpdatePresence(presence);
 	}
 
 	public static void disable() {

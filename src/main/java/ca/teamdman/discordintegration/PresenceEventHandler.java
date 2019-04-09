@@ -90,15 +90,16 @@ public class PresenceEventHandler {
 		return "";
 	}
 
-	@SubscribeEvent()
-	public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-		if (isEntityPlayer(event.player)) {
-			RichPresence.update(presence -> {
-				presence.details = "Main Menu";
-				presence.state = Loader.instance().getActiveModList().size() + " mods loaded";
-			});
-		}
-	}
+	// only fired on single player worlds since client
+//	@SubscribeEvent()
+//	public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+//		if (isEntityPlayer(event.player)) {
+//			RichPresence.update(presence -> {
+//				presence.details = "Main Menu";
+//				presence.state = Loader.instance().getActiveModList().size() + " mods loaded";
+//			});
+//		}
+//	}
 
 	@SubscribeEvent()
 	public static void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
