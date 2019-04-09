@@ -108,10 +108,12 @@ idea {
                 "Run Client"(Application) {
                     mainClass = 'GradleStart'
                     moduleName = getProject().idea.module.name
+                    workingDirectory = new File(getProject().getRootDir(),'run')
                 }
                 "Run Server"(Application) {
                     mainClass = 'GradleStartServer'
                     moduleName = getProject().idea.module.name
+                    workingDirectory = new File(getProject().getRootDir(),'runServer')
                 }
             }
             copyright {}
