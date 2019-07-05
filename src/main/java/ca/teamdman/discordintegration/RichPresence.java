@@ -3,14 +3,11 @@ package ca.teamdman.discordintegration;
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ProgressManager;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 

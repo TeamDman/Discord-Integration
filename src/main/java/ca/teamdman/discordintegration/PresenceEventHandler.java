@@ -58,9 +58,7 @@ public class PresenceEventHandler {
 	@SubscribeEvent
 	public static void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
 		RichPresence.setState(RichPresence.State.ENABLED);
-		RichPresence.update(presence -> {
-			presence.details = "In Game";
-		});
+		RichPresence.update(presence -> presence.details = "In Game");
 	}
 
 	@SubscribeEvent
