@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 //@SuppressWarnings({"Duplicates", "ConstantConditions"})
+@SuppressWarnings("ConstantConditions")
 @Mod.EventBusSubscriber(modid = DiscordIntegration.MODID)
 public class PresenceEventHandler {
 	@SubscribeEvent()
@@ -163,7 +164,7 @@ public class PresenceEventHandler {
 
 	@SubscribeEvent()
 	public static void onHarvest(BlockEvent.BreakEvent event) {
-		if (event.getPlayer().getUniqueID().equals(Minecraft.getMinecraft().player.getUniqueID()))
+		if (isEntityPlayer(event.getPlayer()))
 			if (event.getState() != null && event.getState().getBlock() != null && event.getState().getBlock().getLocalizedName() != null)
 				RichPresence.update(presence -> presence.largeImageText = "Mining " + event.getState().getBlock().getLocalizedName());
 	}
