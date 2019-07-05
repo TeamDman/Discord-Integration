@@ -3,11 +3,14 @@ package ca.teamdman.discordintegration;
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ProgressManager;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -26,17 +29,25 @@ public class RichPresence {
 			e.printStackTrace();
 		}
 		final ProgressManager.ProgressBar bar = barbar;
-		new ScheduledThreadPoolExecutor(1).scheduleAtFixedRate(() -> {
+		ScheduledThreadPoolExecutor executor =  new ScheduledThreadPoolExecutor(1);
+		executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
+		executor.scheduleAtFixedRate(() -> {
 			if (state == State.LOADING && bar != null) {
 				update(presence -> {
 					presence.details = "Launching [" + bar.getStep() + "/" + bar.getSteps() + "]";
 					presence.state = bar.getMessage();
 				});
 			}
-//			System.out.println(presence.state);
 			if (state != State.DISABLED)
 				rpc.Discord_RunCallbacks();
 		}, 0, 2, TimeUnit.SECONDS);
+		Runtime.getRuntime().addShutdownHook(new Thread("Discord Rich Presence Shutdown"){
+			@Override
+			public void run() {
+				disable();
+				executor.shutdown();
+			}
+		});
 	}
 
 	public static void enable() {
@@ -64,13 +75,9 @@ public class RichPresence {
 	public static void update(Consumer<DiscordRichPresence> consumer) {
 		if (state == State.DISABLED)
 			return;
-//		int hash = presence.hashCode();
 		try {
 			consumer.accept(presence);
-		} catch (Exception e) {
-			// fail silently,
-		}
-//		if (hash != presence.hashCode())
+		} catch (Exception ignored) {}
 		rpc.Discord_UpdatePresence(presence);
 	}
 
